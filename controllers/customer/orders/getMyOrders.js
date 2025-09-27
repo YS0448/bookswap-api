@@ -21,7 +21,7 @@ const getMyOrders = async (req, res) => {
         b.image,
         b.status
       FROM manage_books_request mbr
-      JOIN books b ON mbr.book_id = b.book_id
+      LEFT JOIN books b ON mbr.book_id = b.book_id
       WHERE mbr.user_id = ?
       ORDER BY mbr.created_at DESC
       LIMIT ? OFFSET ?
