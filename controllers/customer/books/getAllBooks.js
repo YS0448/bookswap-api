@@ -7,7 +7,7 @@ const getAllBooks = async (req, res) => {
     const user_id = req.query.user_id || null;
     const is_active = 1;
     const request_status = "accepted";
-    
+    const book_status = "available";
     // Query books
     let booksQuery = "";
     let queryParams = [];
@@ -15,25 +15,21 @@ const getAllBooks = async (req, res) => {
     if (user_id) {
       booksQuery = `
         SELECT 
-          b.book_id, 
-          b.title, 
-          b.author, 
-          b.book_condition, 
-          b.image, 
-          b.created_by, 
-          b.status, 
-          b.is_active,
-          mbr.request_status
-        FROM books b
-        LEFT JOIN manage_books_request mbr 
-          ON b.book_id = mbr.book_id 
-        WHERE b.is_active = ? AND b.created_by != ? 
-          AND (mbr.request_status IS NULL OR mbr.request_status != ?)
-        ORDER BY b.created_at DESC
+          book_id, 
+          title, 
+          author, 
+          book_condition, 
+          image, 
+          created_by, 
+          status, 
+          is_active              
+        FROM books        
+        WHERE is_active = ? AND status = ? AND created_by != ?   
+        ORDER BY created_at DESC
         LIMIT ? OFFSET ?
       `;
 
-      queryParams = [ is_active, user_id, request_status, limit, offset];
+      queryParams = [is_active, book_status, user_id, limit, offset];
     } else {
       booksQuery = `
         SELECT * FROM books 
@@ -54,13 +50,9 @@ const getAllBooks = async (req, res) => {
     if (user_id) {
       totalQuery = `
         SELECT COUNT(*) as count
-        FROM books b
-        LEFT JOIN manage_books_request mbr 
-          ON b.book_id = mbr.book_id 
-        WHERE b.is_active = ? AND b.created_by != ? 
-          AND (mbr.request_status IS NULL OR mbr.request_status != ?)
-      `;
-      totalParams = [is_active, user_id, request_status];
+        FROM books 
+        WHERE is_active = ? AND created_by != ? AND status = ?  `;
+      totalParams = [ is_active, user_id, book_status];
     } else {
       totalQuery = "SELECT COUNT(*) as count FROM books WHERE is_active = ?";
       totalParams = [is_active];

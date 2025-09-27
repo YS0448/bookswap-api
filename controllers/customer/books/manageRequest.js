@@ -16,6 +16,9 @@ const createRequest = async (req, res) => {
     const result = await executeQuery(query, [book_id, user_id, currentDateTime, currentDateTime]);
     console.log('result:', result);
 
+
+
+
     return res.status(201).json({
       success: true,
       message: "Book request sent successfully",
@@ -87,13 +90,13 @@ const getManageRequests = async (req, res) => {
 // Update request status (accept/decline)
 const updateRequestStatus = async (req, res) => {
   try {
-    const { request_id, status } = req.body;
-    if (!request_id || !status) {
+    const { request_id, request_status, book_id } = req.body;
+    if (!request_id || !request_status) {
       return res.status(400).json({ message: "Request ID and status required" });
     }
 
     const validStatuses = ["accepted", "declined", "pending"];
-    if (!validStatuses.includes(status)) {
+    if (!validStatuses.includes(request_status)) {
       return res.status(400).json({ message: "Invalid status" });
     }
     const currentDateTime = getUTCDateTime();
@@ -104,7 +107,20 @@ const updateRequestStatus = async (req, res) => {
       WHERE request_id = ?
     `;
 
-    let result= await executeQuery(query, [status, currentDateTime, request_id ]);
+    let result= await executeQuery(query, [request_status, currentDateTime, request_id ]);
+
+    if(request_status==='accepted'){
+      const book_status = "sold";
+      
+      const bookUpdateQuery = `
+        UPDATE books 
+        SET status = ?, updated_at = ?
+        WHERE book_id = ? 
+      `
+    const bookupdateValues = [book_status, currentDateTime, book_id];
+    const requestDetails = await executeQuery(bookUpdateQuery, bookupdateValues);
+    }
+
     res.status(200).json({ message: "Request updated successfully" });
   } catch (err) {
     console.error("Error in updateRequestStatus:", err);
