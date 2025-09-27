@@ -7,7 +7,7 @@ const getAllBooks = async (req, res) => {
     const user_id = req.query.user_id || null;
     const is_active = 1;
     const request_status = "approved";
-
+    
     // Query books
     let booksQuery = "";
     let queryParams = [];
@@ -26,13 +26,14 @@ const getAllBooks = async (req, res) => {
           mbr.request_status
         FROM books b
         LEFT JOIN manage_books_request mbr 
-          ON b.book_id = mbr.book_id AND mbr.user_id = ?
+          ON b.book_id = mbr.book_id 
         WHERE b.is_active = ? AND b.created_by != ? 
           AND (mbr.request_status IS NULL OR mbr.request_status != ?)
         ORDER BY b.created_at DESC
         LIMIT ? OFFSET ?
       `;
-      queryParams = [user_id, is_active, user_id, request_status, limit, offset];
+
+      queryParams = [ is_active, user_id, request_status, limit, offset];
     } else {
       booksQuery = `
         SELECT * FROM books 
@@ -44,6 +45,7 @@ const getAllBooks = async (req, res) => {
     }
 
     const books = await executeQuery(booksQuery, queryParams);
+    console.log('books:', books);
 
     // Total count query
     let totalQuery = "";
@@ -54,11 +56,11 @@ const getAllBooks = async (req, res) => {
         SELECT COUNT(*) as count
         FROM books b
         LEFT JOIN manage_books_request mbr 
-          ON b.book_id = mbr.book_id AND mbr.user_id = ?
+          ON b.book_id = mbr.book_id 
         WHERE b.is_active = ? AND b.created_by != ? 
           AND (mbr.request_status IS NULL OR mbr.request_status != ?)
       `;
-      totalParams = [user_id, is_active, user_id, request_status];
+      totalParams = [is_active, user_id, request_status];
     } else {
       totalQuery = "SELECT COUNT(*) as count FROM books WHERE is_active = ?";
       totalParams = [is_active];

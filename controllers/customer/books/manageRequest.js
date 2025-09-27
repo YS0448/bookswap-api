@@ -100,11 +100,11 @@ const updateRequestStatus = async (req, res) => {
     
     const query = `
       UPDATE manage_books_request
-      SET request_status = ?, update_at = ?, created_at = ?
+      SET request_status = ?, updated_at = ?
       WHERE request_id = ?
     `;
 
-    let result= await executeQuery(query, [status, request_id, currentDateTime, currentDateTime]);
+    let result= await executeQuery(query, [status, currentDateTime, request_id ]);
     res.status(200).json({ message: "Request updated successfully" });
   } catch (err) {
     console.error("Error in updateRequestStatus:", err);
