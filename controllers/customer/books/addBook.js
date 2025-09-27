@@ -21,12 +21,12 @@ const addBook = async (req, res) => {
     console.log('imagePath:', imagePath);
 
     const status = "available"; 
-
+    let currentDateTime = getUTCDateTime();
     const query = `
       INSERT INTO books (title, author, book_condition, image, created_by, updated_at, created_at, status)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const value= [title, author, condition, imagePath, userId, getUTCDateTime, getUTCDateTime, status]
+    const value= [title, author, condition, imagePath, userId, currentDateTime, currentDateTime, status]
     const result = await executeQuery(query, value);
 
     res.status(201).json({
