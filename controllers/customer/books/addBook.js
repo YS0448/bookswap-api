@@ -1,5 +1,7 @@
 const {executeQuery}= require("../../../utils/db/dbUtils"); // your MySQL connection
 const uploadImage = require("../../../utils/uploadMedia/uploadImage"); // your helper
+const { getUTCDateTime } = require("../../../utils/date/dateUtils");
+
 
 const addBook = async (req, res) => {
   try {
@@ -19,12 +21,12 @@ const addBook = async (req, res) => {
     console.log('imagePath:', imagePath);
 
     const status = "available"; 
-    
+
     const query = `
-      INSERT INTO books (title, author, book_condition, image, created_by, status)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO books (title, author, book_condition, image, created_by, updated_at, created_at, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const value= [title, author, condition, imagePath, userId, status]
+    const value= [title, author, condition, imagePath, userId, getUTCDateTime, getUTCDateTime, status]
     const result = await executeQuery(query, value);
 
     res.status(201).json({

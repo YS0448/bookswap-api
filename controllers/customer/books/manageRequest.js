@@ -1,4 +1,5 @@
 const { executeQuery } = require("../../../utils/db/dbUtils");
+const { getUTCDateTime } = require("../../../utils/date/dateUtils");
 
 const createRequest = async (req, res) => {
   try {
@@ -9,9 +10,10 @@ const createRequest = async (req, res) => {
       return res.status(400).json({ success: false, message: "Book ID and User ID are required."});
     }
 
-    const query = `INSERT INTO manage_books_request (book_id, user_id) VALUES (?, ? )`;
+    const currentDateTime = getUTCDateTime();
+    const query = `INSERT INTO manage_books_request (book_id, user_id, update_at, created_at ) VALUES (?, ?, ?, ? )`;
 
-    const result = await executeQuery(query, [book_id, user_id]);
+    const result = await executeQuery(query, [book_id, user_id, currentDateTime, currentDateTime]);
     console.log('result:', result);
 
     return res.status(201).json({
@@ -94,14 +96,15 @@ const updateRequestStatus = async (req, res) => {
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Invalid status" });
     }
-
+    const currentDateTime = getUTCDateTime();
+    
     const query = `
       UPDATE manage_books_request
-      SET request_status = ?
+      SET request_status = ?, update_at = ?, created_at = ?
       WHERE request_id = ?
     `;
 
-    let result= await executeQuery(query, [status, request_id]);
+    let result= await executeQuery(query, [status, request_id, currentDateTime, currentDateTime]);
     res.status(200).json({ message: "Request updated successfully" });
   } catch (err) {
     console.error("Error in updateRequestStatus:", err);

@@ -95,13 +95,14 @@ const signup = async (req, res) => {
 
     const insertUserQuery = `
       INSERT INTO users 
-      (full_name, email, password_hash, role, created_at, last_login_at, status)  
-      VALUES (?, ?, ?, ?, ?, ?, ?)`;
+      (full_name, email, password_hash, role, created_at, last_login_at, updated_at ,status)  
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
     const result = await executeQuery(insertUserQuery, [
       fullName,
       email,
       hashedPassword,
       role,
+      currentDateTime,
       currentDateTime,
       currentDateTime,
       status
