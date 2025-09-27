@@ -6,7 +6,7 @@ const getAllBooks = async (req, res) => {
     const offset = parseInt(req.query.offset) || 0;
     const user_id = req.query.user_id || null;
     const is_active = 1;
-    const request_status = "approved";
+    const request_status = "accepted";
     
     // Query books
     let booksQuery = "";
