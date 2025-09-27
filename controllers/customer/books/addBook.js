@@ -18,11 +18,13 @@ const addBook = async (req, res) => {
     const imagePath = await uploadImage(imageFile);
     console.log('imagePath:', imagePath);
 
+    const status = "available"; 
+    
     const query = `
-      INSERT INTO books (title, author, book_condition, image, created_by)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO books (title, author, book_condition, image, created_by, status)
+      VALUES (?, ?, ?, ?, ?, ?)
     `;
-    const value= [title, author, condition, imagePath, userId]
+    const value= [title, author, condition, imagePath, userId, status]
     const result = await executeQuery(query, value);
 
     res.status(201).json({
