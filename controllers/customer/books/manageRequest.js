@@ -11,7 +11,7 @@ const createRequest = async (req, res) => {
     }
 
     const currentDateTime = getUTCDateTime();
-    const query = `INSERT INTO manage_books_request (book_id, user_id, update_at, created_at ) VALUES (?, ?, ?, ? )`;
+    const query = `INSERT INTO manage_books_request (book_id, user_id, updated_at, created_at ) VALUES (?, ?, ?, ? )`;
 
     const result = await executeQuery(query, [book_id, user_id, currentDateTime, currentDateTime]);
     console.log('result:', result);
