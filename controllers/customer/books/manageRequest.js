@@ -37,7 +37,7 @@ const createRequest = async (req, res) => {
 
 // Get all requests for the logged-in user's books
 // ✅ Fetch all requests for books created by logged-in user
-const getManageRequests = async (req, res) => {
+const getBookRequests = async (req, res) => {
   try {
     const owner_id = req.query.owner_id || null;
     const limit = parseInt(req.query.limit) || 10;   // ✅ default 10
@@ -90,7 +90,8 @@ const getManageRequests = async (req, res) => {
 // Update request status (accept/decline)
 const updateRequestStatus = async (req, res) => {
   try {
-    const { request_id, request_status, book_id } = req.body;
+    const request_id= req.params.request_id;
+    const { request_status, book_id } = req.body;
     if (!request_id || !request_status) {
       return res.status(400).json({ message: "Request ID and status required" });
     }
@@ -129,4 +130,4 @@ const updateRequestStatus = async (req, res) => {
 };
 
 
-module.exports = { createRequest, getManageRequests, updateRequestStatus };
+module.exports = { createRequest, getBookRequests, updateRequestStatus };

@@ -3,7 +3,7 @@ const { executeQuery } = require("../../../utils/db/dbUtils");
 // Fetch user orders with pagination
 const getMyOrders = async (req, res) => {
   try {
-    const user_id = req.user.user_id;
+    const user_id = req.user?.user_id || null;
     if (!user_id) return res.status(400).json({ message: "User ID required" });
 
     const limit = parseInt(req.query.limit) || 5;
