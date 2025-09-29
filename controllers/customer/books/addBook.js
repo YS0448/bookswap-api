@@ -1,5 +1,5 @@
 const {executeQuery}= require("../../../utils/db/dbUtils"); // your MySQL connection
-const uploadImage = require("../../../utils/uploadMedia/uploadImage"); // your helper
+const {uploadImage} = require("../../../utils/uploadMedia/uploadImage"); // your helper
 const { getUTCDateTime } = require("../../../utils/date/dateUtils");
 
 

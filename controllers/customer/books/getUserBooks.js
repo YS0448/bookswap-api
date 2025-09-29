@@ -3,7 +3,8 @@ const { executeQuery } = require("../../../utils/db/dbUtils");
 
 const getUserBooks = async (req, res) => {
   try {
-    const user_id = req.query.user_id;
+    const user_id = req.user.user_id || null;
+    console.log('user_id:', user_id);
     if (!user_id) return res.status(400).json({ message: "User ID required" });
 
     const limit = parseInt(req.query.limit) || 5;
