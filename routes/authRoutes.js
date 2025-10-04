@@ -7,7 +7,7 @@ router.post('/signup',authController.signup)
 router.post('/login',authController.login)
 
 // Protected routes
-router.get('/me', authenticate, authController.getCurrentUser); // ← Add this line
+router.get('/me', authenticate, authController.getCurrentUser); 
 
 
 
